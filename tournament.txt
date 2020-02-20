@@ -1,0 +1,284 @@
+--------------------------------------------------------------------------------
+Section 0 - Line up
+--------------------------------------------------------------------------------
+Player 0 (P0): E0, Collude, then alternate every 2 rounds
+        Collude first and the after alternate every two rounds.
+Player 1 (P1): E1, Betray, Collude unless betrayed
+        Betray first round, then keep colluding until betrayed.
+Player 2 (P2): E2, Collude, Collude until betrayed
+        First round collude, then if they have c as their most recent move, coll
+        ude. Otherwise betray
+Player 3 (P3): E3, Collude but retaliate
+        Collude first round. Collude, except in a round after getting 
+        a severe punishment.
+--------------------------------------------------------------------------------
+Section 1 - Player vs. Player
+--------------------------------------------------------------------------------
+Each column shows pts//round earned against each other player:
+             P0     P1     P2     P3
+vs. P0 :      0   -133   -165   -134
+vs. P1 :   -133      0     -8   -202
+vs. P2 :     32     -3      0      0
+vs. P3 :   -130   -199      0      0
+TOTAL  :   -231   -335   -173   -336
+--------------------------------------------------------------------------------
+Section 2 - Leaderboard
+--------------------------------------------------------------------------------
+Average points per round:
+Team name (P#):  Score      with strategy name
+E2        (P2):        -44 points with Collude, Collude until betrayed         
+E0        (P0):        -58 points with Collude, then alternate every 2 rounds  
+E1        (P1):        -84 points with Betray, Collude unless betrayed         
+E3        (P3):        -84 points with Collude but retaliate                   
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+example0--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'E0'
+strategy_name = 'Collude, then alternate every 2 rounds'
+strategy_description = 'Collude first and the after alternate every two rounds.'
+    
+def move(my_history, their_history, my_score, their_score):
+  if len(my_history) == 0:
+    return 'c'
+  elif len(my_history)%3 == 0:
+    return 'b'
+  else:
+    return 'c'
+    
+    #history: a string with one letter (c or b) per round that has been played with this opponent.
+    #their_history: a string of the same length as history, possibly empty. 
+    #The first round between these two players is my_history[0] and their_history[0]
+    #The most recent round is my_history[-1] and their_history[-1]
+    
+    #Returns 'c' or 'b' for collude or betray.
+    #'''
+    
+    # This player always colludes.
+    #return 'c'
+
+  #''' Arguments accepted: my_history, their_history are strings.
+  #my_score, their_score are ints.
+  #Make my move.
+  #Returns c or b. 
+  #'''
+
+--------------------------------------------------------------------------------
+example1--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'E1'
+strategy_name = 'Betray, Collude unless betrayed'
+strategy_description = 'Betray first round, then keep colluding until betrayed.'
+    
+def move(my_history, their_history, my_score, their_score):
+  if len(my_history)==0:
+    return 'b'
+  elif their_history[-1] == 'b':
+    return 'b'
+  else:
+    return 'c'
+    #'''Make my move based on the history with this player.
+    
+    #history: a string with one letter (c or b) per round that has been played with this opponent.
+    #their_history: a string of the same length as history, possibly empty. 
+    #The first round between these two players is my_history[0] and their_history[0]
+    #The most recent round is my_history[-1] and their_history[-1]
+    
+    #Returns 'c' or 'b' for collude or betray.
+    #'''
+    
+    #This example player always betrays.      
+    #return 'b'
+
+
+--------------------------------------------------------------------------------
+example2--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'E2'
+strategy_name = 'Collude, Collude until betrayed'
+strategy_description = 'First round collude, then if they have c as their most recent move, collude. Otherwise betray'
+    
+def move(my_history, their_history, my_score, their_score):
+  if len(my_history) == 0:
+    return'c'
+  elif 'c' in their_history:
+    return 'c'
+  else:
+    return 'b'--------------------------------------------------------------------------------
+example3--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'E3'
+strategy_name = 'Collude but retaliate'
+strategy_description = '''\
+Collude first round. Collude, except in a round after getting 
+a severe punishment.'''
+    
+def move(my_history, their_history, my_score, their_score):
+    '''Make my move based on the history with this player.
+    
+    history: a string with one letter (c or b) per round that has been played with this opponent.
+    their_history: a string of the same length as history, possibly empty. 
+    The first round between these two players is my_history[0] and their_history[0]
+    The most recent round is my_history[-1] and their_history[-1]
+    
+    Returns 'c' or 'b' for collude or betray.
+    '''
+    if len(my_history)==0: # It's the first round; collude.
+        return 'c'
+    elif my_history[-1]=='c' and their_history[-1]=='b':
+        return 'b' # Betray if they were severely punished last time,
+    else:
+        return 'c' # otherwise collude.--------------------------------------------------------------------------------
+Section 3 - Game Data for Team E0
+--------------------------------------------------------------------------------
+-133 pt//round: E0(P0) "Collude, then alternate every 2 rounds"
+-133 pt//ound: E1(P1) "Betray, Collude unless betrayed"
+cCCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBc
+BCCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcB
+
+CBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCB
+CcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCc
+
+--------------------------------------------------------------------------------
+32 pt//round: E0(P0) "Collude, then alternate every 2 rounds"
+-165 pt//ound: E2(P2) "Collude, Collude until betrayed"
+CCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBC
+CCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcC
+
+CBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBC
+CcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcC
+
+--------------------------------------------------------------------------------
+-130 pt//round: E0(P0) "Collude, then alternate every 2 rounds"
+-134 pt//ound: E3(P3) "Collude but retaliate"
+CCCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBc
+CCCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcB
+
+CBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCB
+CcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCc
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team E1
+--------------------------------------------------------------------------------
+-133 pt//round: E1(P1) "Betray, Collude unless betrayed"
+-133 pt//ound: E0(P0) "Collude, then alternate every 2 rounds"
+BCCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcB
+cCCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBc
+
+CcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCc
+CBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCB
+
+--------------------------------------------------------------------------------
+-3 pt//round: E1(P1) "Betray, Collude unless betrayed"
+-8 pt//ound: E2(P2) "Collude, Collude until betrayed"
+BcBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+cBcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-199 pt//round: E1(P1) "Betray, Collude unless betrayed"
+-202 pt//ound: E3(P3) "Collude but retaliate"
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+
+BcBcBcBcBcBcBcBcBcBcBcB
+cBcBcBcBcBcBcBcBcBcBcBc
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team E2
+--------------------------------------------------------------------------------
+-165 pt//round: E2(P2) "Collude, Collude until betrayed"
+32 pt//ound: E0(P0) "Collude, then alternate every 2 rounds"
+CCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcC
+CCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBC
+
+CcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcCCcC
+CBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBCCBC
+
+--------------------------------------------------------------------------------
+-8 pt//round: E2(P2) "Collude, Collude until betrayed"
+-3 pt//ound: E1(P1) "Betray, Collude unless betrayed"
+cBcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+BcBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+0 pt//round: E2(P2) "Collude, Collude until betrayed"
+0 pt//ound: E3(P3) "Collude but retaliate"
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team E3
+--------------------------------------------------------------------------------
+-134 pt//round: E3(P3) "Collude but retaliate"
+-130 pt//ound: E0(P0) "Collude, then alternate every 2 rounds"
+CCCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcB
+CCCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBc
+
+CcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCcBCc
+CBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCBcCB
+
+--------------------------------------------------------------------------------
+-202 pt//round: E3(P3) "Collude but retaliate"
+-199 pt//ound: E1(P1) "Betray, Collude unless betrayed"
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+
+cBcBcBcBcBcBcBcBcBcBcBc
+BcBcBcBcBcBcBcBcBcBcBcB
+
+--------------------------------------------------------------------------------
+0 pt//round: E3(P3) "Collude but retaliate"
+0 pt//ound: E2(P2) "Collude, Collude until betrayed"
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
